@@ -55,7 +55,7 @@
 //! assert_eq!(&data[..], &dec_data[..]);
 //! ```
 #![cfg_attr(not(test), no_std)]
-
+extern crate num_bigint_dig as num_bigint;
 #[cfg(not(feature = "alloc"))]
 compile_error!("This crate does not yet support environments without liballoc. See https://github.com/RustCrypto/RSA/issues/51.");
 

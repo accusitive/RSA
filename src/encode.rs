@@ -342,118 +342,118 @@ pub trait PublicKeyEncoding: PublicKey {
 }
 
 impl PublicKeyEncoding for RSAPublicKey {}
+// #[cfg(all(test, feature = "pem"))]
+// mod tests {
+//     use rand::SeedableRng;
 
-#[cfg(all(test, feature = "pem"))]
-mod tests {
-    use super::{EncodeConfig, LineEnding, PrivateKeyPemEncoding, PublicKeyPemEncoding};
-    use crate::{RSAPrivateKey, RSAPublicKey};
-    use rand::thread_rng;
-    use rand::SeedableRng;
-    use rand_xorshift::XorShiftRng;
-    use std::convert::TryFrom;
+//     use super::{EncodeConfig, LineEnding, PrivateKeyPemEncoding, PublicKeyPemEncoding};
+//     use crate::{RSAPrivateKey, RSAPublicKey};
+//     use rand::thread_rng;
+//     use rand_xorshift::XorShiftRng;
+//     use std::convert::TryFrom;
 
-    #[test]
-    fn priv_pem_encoding_pkcs8() {
-        const PKCS8_PRIVATE_KEY: &str = "-----BEGIN PRIVATE KEY-----\nMFICAQAwCwYJKoZIhvcNAQEBBEAwPgIBAAIJAJGyCM1NTAwDAgMBAAECCQCMDHwC\nEdIqAQIFAMEBAQECBQDBQAkDAgMDBAECBAHfV/cCBQC7RXbf\n-----END PRIVATE KEY-----\n";
-        let mut rng = XorShiftRng::from_seed([1; 16]);
-        let key = RSAPrivateKey::new(&mut rng, 64).expect("failed to generate key");
-        let pem_str = key
-            .to_pem_pkcs8()
-            .expect("failed to encode private key to pem string");
-        assert_eq!(pem_str, PKCS8_PRIVATE_KEY);
-    }
-    #[test]
-    fn priv_pem_encoding_pkcs1() {
-        const PKCS1_PRIVATE_KEY: &str = "-----BEGIN RSA PRIVATE KEY-----\nMD4CAQACCQCRsgjNTUwMAwIDAQABAgkAjAx8AhHSKgECBQDBAQEBAgUAwUAJAwID\nAwQBAgQB31f3AgUAu0V23w==\n-----END RSA PRIVATE KEY-----\n";
-        let mut rng = XorShiftRng::from_seed([1; 16]);
-        let key = RSAPrivateKey::new(&mut rng, 64).expect("failed to generate key");
-        let pem_str = key
-            .to_pem_pkcs1()
-            .expect("failed to encode private key to pem string");
-        assert_eq!(pem_str, PKCS1_PRIVATE_KEY);
-    }
+//     #[test]
+//     fn priv_pem_encoding_pkcs8() {
+//         const PKCS8_PRIVATE_KEY: &str = "-----BEGIN PRIVATE KEY-----\nMFICAQAwCwYJKoZIhvcNAQEBBEAwPgIBAAIJAJGyCM1NTAwDAgMBAAECCQCMDHwC\nEdIqAQIFAMEBAQECBQDBQAkDAgMDBAECBAHfV/cCBQC7RXbf\n-----END PRIVATE KEY-----\n";
+//         let mut rng = XorShiftRng::from_seed([1; 16]);
+//         let key = RSAPrivateKey::new(&mut rng, 64).expect("failed to generate key");
+//         let pem_str = key
+//             .to_pem_pkcs8()
+//             .expect("failed to encode private key to pem string");
+//         assert_eq!(pem_str, PKCS8_PRIVATE_KEY);
+//     }
+//     #[test]
+//     fn priv_pem_encoding_pkcs1() {
+//         const PKCS1_PRIVATE_KEY: &str = "-----BEGIN RSA PRIVATE KEY-----\nMD4CAQACCQCRsgjNTUwMAwIDAQABAgkAjAx8AhHSKgECBQDBAQEBAgUAwUAJAwID\nAwQBAgQB31f3AgUAu0V23w==\n-----END RSA PRIVATE KEY-----\n";
+//         let mut rng = XorShiftRng::from_seed([1; 16]);
+//         let key = RSAPrivateKey::new(&mut rng, 64).expect("failed to generate key");
+//         let pem_str = key
+//             .to_pem_pkcs1()
+//             .expect("failed to encode private key to pem string");
+//         assert_eq!(pem_str, PKCS1_PRIVATE_KEY);
+//     }
 
-    #[test]
-    fn pub_pem_encoding_pkcs8() {
-        const PKCS8_PUBLIC_KEY: &str = "-----BEGIN PUBLIC KEY-----\nMCIwCwYJKoZIhvcNAQEBAxMAMBACCQCRsgjNTUwMAwIDAQAB\n-----END PUBLIC KEY-----\n";
-        let mut rng = XorShiftRng::from_seed([1; 16]);
-        let key = RSAPrivateKey::new(&mut rng, 64)
-            .expect("failed to generate key")
-            .to_public_key();
-        let pem_str = key
-            .to_pem_pkcs8()
-            .expect("failed to encode private key to pem string");
-        assert_eq!(pem_str, PKCS8_PUBLIC_KEY);
-    }
+//     #[test]
+//     fn pub_pem_encoding_pkcs8() {
+//         const PKCS8_PUBLIC_KEY: &str = "-----BEGIN PUBLIC KEY-----\nMCIwCwYJKoZIhvcNAQEBAxMAMBACCQCRsgjNTUwMAwIDAQAB\n-----END PUBLIC KEY-----\n";
+//         let mut rng = XorShiftRng::from_seed([1; 16]);
+//         let key = RSAPrivateKey::new(&mut rng, 64)
+//             .expect("failed to generate key")
+//             .to_public_key();
+//         let pem_str = key
+//             .to_pem_pkcs8()
+//             .expect("failed to encode private key to pem string");
+//         assert_eq!(pem_str, PKCS8_PUBLIC_KEY);
+//     }
 
-    #[test]
-    fn pub_pem_encoding_pkcs1() {
-        const PKCS1_PUBLIC_KEY: &str = "-----BEGIN RSA PUBLIC KEY-----\nMBACCQCRsgjNTUwMAwIDAQAB\n-----END RSA PUBLIC KEY-----\n";
+//     #[test]
+//     fn pub_pem_encoding_pkcs1() {
+//         const PKCS1_PUBLIC_KEY: &str = "-----BEGIN RSA PUBLIC KEY-----\nMBACCQCRsgjNTUwMAwIDAQAB\n-----END RSA PUBLIC KEY-----\n";
 
-        let mut rng = XorShiftRng::from_seed([1; 16]);
-        let key = RSAPrivateKey::new(&mut rng, 64)
-            .expect("failed to generate key")
-            .to_public_key();
-        let pem_str = key
-            .to_pem_pkcs1()
-            .expect("failed to encode private key to pem string");
-        assert_eq!(pem_str, PKCS1_PUBLIC_KEY);
-    }
+//         let mut rng = XorShiftRng::from_seed([1; 16]);
+//         let key = RSAPrivateKey::new(&mut rng, 64)
+//             .expect("failed to generate key")
+//             .to_public_key();
+//         let pem_str = key
+//             .to_pem_pkcs1()
+//             .expect("failed to encode private key to pem string");
+//         assert_eq!(pem_str, PKCS1_PUBLIC_KEY);
+//     }
 
-    #[test]
-    fn symmetric_private_key_encoding_pkcs1() {
-        let mut rng = thread_rng();
-        let key = RSAPrivateKey::new(&mut rng, 128).unwrap();
-        let pem2 = pem::parse(key.to_pem_pkcs1().unwrap()).expect("pem::parse failed");
-        let key2 = RSAPrivateKey::try_from(pem2).expect("RSAPrivateKey::try_from failed");
-        assert_eq!(key, key2);
-    }
+//     #[test]
+//     fn symmetric_private_key_encoding_pkcs1() {
+//         let mut rng = thread_rng();
+//         let key = RSAPrivateKey::new(&mut rng, 128).unwrap();
+//         let pem2 = pem::parse(key.to_pem_pkcs1().unwrap()).expect("pem::parse failed");
+//         let key2 = RSAPrivateKey::try_from(pem2).expect("RSAPrivateKey::try_from failed");
+//         assert_eq!(key, key2);
+//     }
 
-    #[test]
-    fn symmetric_private_key_encoding_pkcs8() {
-        let mut rng = thread_rng();
-        let key = RSAPrivateKey::new(&mut rng, 128).unwrap();
-        let pem2 = pem::parse(key.to_pem_pkcs8().unwrap()).expect("pem::parse failed");
-        let key2 = RSAPrivateKey::try_from(pem2).expect("RSAPrivateKey::try_from failed");
-        assert_eq!(key, key2);
-    }
+//     #[test]
+//     fn symmetric_private_key_encoding_pkcs8() {
+//         let mut rng = thread_rng();
+//         let key = RSAPrivateKey::new(&mut rng, 128).unwrap();
+//         let pem2 = pem::parse(key.to_pem_pkcs8().unwrap()).expect("pem::parse failed");
+//         let key2 = RSAPrivateKey::try_from(pem2).expect("RSAPrivateKey::try_from failed");
+//         assert_eq!(key, key2);
+//     }
 
-    #[test]
-    fn symmetric_public_key_encoding_pkcs1() {
-        let mut rng = thread_rng();
-        let key = RSAPrivateKey::new(&mut rng, 128).unwrap().to_public_key();
-        let pem2 = pem::parse(key.to_pem_pkcs1().unwrap()).expect("pem::parse failed");
-        let key2 = RSAPublicKey::try_from(pem2).expect("RSAPublicKey::try_from failed");
-        assert_eq!(key, key2);
-    }
+//     #[test]
+//     fn symmetric_public_key_encoding_pkcs1() {
+//         let mut rng = thread_rng();
+//         let key = RSAPrivateKey::new(&mut rng, 128).unwrap().to_public_key();
+//         let pem2 = pem::parse(key.to_pem_pkcs1().unwrap()).expect("pem::parse failed");
+//         let key2 = RSAPublicKey::try_from(pem2).expect("RSAPublicKey::try_from failed");
+//         assert_eq!(key, key2);
+//     }
 
-    #[test]
-    fn symmetric_public_key_encoding_pkcs8() {
-        let mut rng = thread_rng();
-        let key = RSAPrivateKey::new(&mut rng, 128).unwrap().to_public_key();
-        let pem2 = pem::parse(key.to_pem_pkcs8().unwrap()).expect("pem::parse failed");
-        let key2 = RSAPublicKey::try_from(pem2).expect("RSAPublicKey::try_from failed");
-        assert_eq!(key, key2);
-    }
+//     #[test]
+//     fn symmetric_public_key_encoding_pkcs8() {
+//         let mut rng = thread_rng();
+//         let key = RSAPrivateKey::new(&mut rng, 128).unwrap().to_public_key();
+//         let pem2 = pem::parse(key.to_pem_pkcs8().unwrap()).expect("pem::parse failed");
+//         let key2 = RSAPublicKey::try_from(pem2).expect("RSAPublicKey::try_from failed");
+//         assert_eq!(key, key2);
+//     }
 
-    #[test]
-    fn pem_encoding_config() {
-        const PKCS8_PRIVATE_KEY: &str = "-----BEGIN PRIVATE KEY-----\r\nMFICAQAwCwYJKoZIhvcNAQEBBEAwPgIBAAIJAJGyCM1NTAwDAgMBAAECCQCMDHwC\r\nEdIqAQIFAMEBAQECBQDBQAkDAgMDBAECBAHfV/cCBQC7RXbf\r\n-----END PRIVATE KEY-----\r\n";
-        const PKCS8_PUBLIC_KEY: &str = "-----BEGIN PUBLIC KEY-----\r\nMCIwCwYJKoZIhvcNAQEBAxMAMBACCQCRsgjNTUwMAwIDAQAB\r\n-----END PUBLIC KEY-----\r\n";
-        let mut rng = XorShiftRng::from_seed([1; 16]);
-        let key = RSAPrivateKey::new(&mut rng, 64).expect("failed to generate key");
-        let pub_key = key.to_public_key();
-        let pem_str = key
-            .to_pem_pkcs8_with_config(EncodeConfig {
-                line_ending: LineEnding::CRLF,
-            })
-            .expect("failed to encode private key to pem string");
-        assert_eq!(pem_str, PKCS8_PRIVATE_KEY);
-        let pem_str = pub_key
-            .to_pem_pkcs8_with_config(EncodeConfig {
-                line_ending: LineEnding::CRLF,
-            })
-            .expect("failed to encode private key to pem string");
-        assert_eq!(pem_str, PKCS8_PUBLIC_KEY);
-    }
-}
+//     #[test]
+//     fn pem_encoding_config() {
+//         const PKCS8_PRIVATE_KEY: &str = "-----BEGIN PRIVATE KEY-----\r\nMFICAQAwCwYJKoZIhvcNAQEBBEAwPgIBAAIJAJGyCM1NTAwDAgMBAAECCQCMDHwC\r\nEdIqAQIFAMEBAQECBQDBQAkDAgMDBAECBAHfV/cCBQC7RXbf\r\n-----END PRIVATE KEY-----\r\n";
+//         const PKCS8_PUBLIC_KEY: &str = "-----BEGIN PUBLIC KEY-----\r\nMCIwCwYJKoZIhvcNAQEBAxMAMBACCQCRsgjNTUwMAwIDAQAB\r\n-----END PUBLIC KEY-----\r\n";
+//         let mut rng = XorShiftRng::from_seed([1; 16]);
+//         let key = RSAPrivateKey::new(&mut rng, 64).expect("failed to generate key");
+//         let pub_key = key.to_public_key();
+//         let pem_str = key
+//             .to_pem_pkcs8_with_config(EncodeConfig {
+//                 line_ending: LineEnding::CRLF,
+//             })
+//             .expect("failed to encode private key to pem string");
+//         assert_eq!(pem_str, PKCS8_PRIVATE_KEY);
+//         let pem_str = pub_key
+//             .to_pem_pkcs8_with_config(EncodeConfig {
+//                 line_ending: LineEnding::CRLF,
+//             })
+//             .expect("failed to encode private key to pem string");
+//         assert_eq!(pem_str, PKCS8_PUBLIC_KEY);
+//     }
+// }

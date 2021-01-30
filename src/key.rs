@@ -30,7 +30,7 @@ pub trait PublicKeyParts {
 
     /// Returns the modulus size in bytes. Raw signatures and ciphertexts for
     /// or by this public key will have the same size.
-    fn size(&self) -> usize {
+    fn size(&self) -> usize { 
         (self.n().bits() + 7) / 8
     }
 }
@@ -924,7 +924,7 @@ mod tests {
             }
             let has_label: bool = rng.gen();
             let label: Option<String> = if has_label {
-                Some(rng.clone().sample_iter(&Alphanumeric).take(30).collect())
+                Some(String::from_utf8(rng.clone().sample_iter(&Alphanumeric).take(30).collect::<Vec<_>>()).unwrap())
             } else {
                 None
             };
